@@ -17,7 +17,7 @@ export const uploadResume = async (req, res) => {
       email,
       phone,
       location,
-      jobId,
+      jobId: jobIdFromBody,
       skills: manualSkills,
       experience: manualExp,
       education: manualEducation,
@@ -30,11 +30,13 @@ export const uploadResume = async (req, res) => {
       resumeText: manualText, // optional manual text
     } = req.body;
 
-    if (!candidateName || !jobId) {
-      return res.status(400).json({ message: "candidateName and jobId are required" });
-    }
+    // Accept jobId from body, query, or params for flexibility
+    const jobId = jobIdFromBody || req.query.jobId || req.params.jobId;
 
     // Verify job belongs to the logged-in company
+    if (!jobId) {
+      return res.status(400).json({ message: "jobId is required" });
+    }
     const job = await Job.findOne({ _id: jobId, companyId: req.user.companyId });
     if (!job) return res.status(404).json({ message: "Job not found for this company" });
 
@@ -48,17 +50,18 @@ export const uploadResume = async (req, res) => {
     }
 
     // ---------------- Structured Parsing ----------------
-    const parsedData = parseResumeText(resumeText);
+    const parsedData = parseResumeText(resumeText || "");
 
     // Merge parser results with manual inputs (manual inputs override parser)
+    // Ensure proper data types for MongoDB schema
     const resumeData = {
-      skills: manualSkills || parsedData.skills || [],
-      experience: manualExp || parsedData.experience || 0,
-      education: manualEducation || parsedData.education || [],
-      projects: manualProjects || parsedData.projects || [],
-      certifications: manualCertifications || parsedData.certifications || [],
-      extracurriculars: manualExtras || parsedData.extracurriculars || [],
-      portfolioLinks: manualPortfolio || parsedData.portfolioLinks || [],
+      skills: Array.isArray(manualSkills) ? manualSkills : (parsedData.skills || []),
+      experience: typeof manualExp === 'number' ? manualExp : (parsedData.experience || 0),
+      education: Array.isArray(manualEducation) ? manualEducation : (parsedData.education || []),
+      projects: Array.isArray(manualProjects) ? manualProjects : (parsedData.projects || []),
+      certifications: Array.isArray(manualCertifications) ? manualCertifications : (parsedData.certifications || []),
+      extracurriculars: Array.isArray(manualExtras) ? manualExtras : (parsedData.extracurriculars || []),
+      portfolioLinks: Array.isArray(manualPortfolio) ? manualPortfolio : (parsedData.portfolioLinks || []),
       github: github || parsedData.github || "",
       linkedin: linkedin || parsedData.linkedin || "",
     };
@@ -76,8 +79,14 @@ if (resumeText && job.description) {
 
 
     // ---------------- Save Resume ----------------
+    // Derive candidateName if not provided
+    const derivedName = candidateName || parsedData.candidateName || (email ? email.split("@")[0] : "");
+    if (!derivedName) {
+      return res.status(400).json({ message: "candidateName could not be determined" });
+    }
+
     const resume = await Resume.create({
-      candidateName,
+      candidateName: derivedName,
       email,
       phone,
       location,

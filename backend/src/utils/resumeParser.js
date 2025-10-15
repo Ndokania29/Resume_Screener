@@ -1,19 +1,19 @@
 import fs from "fs";
-import * as pdf from "pdf-parse";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse');
 
-
-
-export async function extractTextFromPDF(filePath) {
+export async function extractTextFromPDF(input) {
   try {
-    const dataBuffer = fs.readFileSync(filePath);
-    const data = await pdf(dataBuffer);
+    // Accept either a Buffer (preferred for multer) or a filesystem path
+    const dataBuffer = Buffer.isBuffer(input) ? input : fs.readFileSync(input);
+    const data = await pdfParse(dataBuffer);
     return data.text;
   } catch (error) {
     console.error("Error extracting text from PDF:", error);
     throw new Error("Failed to extract text from PDF");
   }
 }
-
 
 export const parseResumeText = (resumeText) => {
   const lines = resumeText
@@ -28,7 +28,7 @@ export const parseResumeText = (resumeText) => {
     location: "",
     education: [],
     skills: [],
-    experience: [],
+    experience: 0, // Changed from [] to 0 (number of years)
     projects: [],
     certifications: [],
     extracurriculars: [],
@@ -62,6 +62,14 @@ export const parseResumeText = (resumeText) => {
         .split(",")
         .map(s => s.trim())
         .filter(Boolean);
+    }
+
+    // Experience parsing - look for years of experience
+    if (/(\d+)\s*years?\s*(of\s*)?experience/i.test(line)) {
+      const match = line.match(/(\d+)\s*years?\s*(of\s*)?experience/i);
+      if (match) {
+        resumeData.experience = parseInt(match[1]);
+      }
     }
 
     // Projects
