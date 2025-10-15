@@ -1,0 +1,19 @@
+# Node
+node_modules
+.env
+
+# Build outputs
+dist
+build
+
+# Logs
+*.log
+
+# VS Code
+.vscode
+
+# OS files
+.DS_Store
+Thumbs.db
+.idea
+*.suo
