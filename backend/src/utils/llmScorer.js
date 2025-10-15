@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-// Use the correct model name for Gemini
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+// Use the correct model name for Gemini (updated model name)
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 /**
  * Compute resume match score using Gemini AI (Deep ATS analysis)
@@ -120,11 +120,11 @@ function generateFallbackScore(resumeText, jobDescription) {
       'react', 'angular', 'vue', 'html', 'css', 'sass', 'bootstrap', 'tailwind', 'webpack', 'babel',
       // Backend
       'node', 'express', 'spring', 'django', 'flask', 'laravel', 'rails',
-      // Databases
+
       'sql', 'mysql', 'postgresql', 'mongodb', 'redis', 'elasticsearch',
-      // Cloud & DevOps
+      
       'aws', 'azure', 'gcp', 'docker', 'kubernetes', 'jenkins', 'git', 'ci/cd',
-      // Other
+      
       'api', 'rest', 'graphql', 'microservices', 'agile', 'scrum'
     ];
     

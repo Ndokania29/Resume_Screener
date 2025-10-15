@@ -336,42 +336,41 @@ function Dashboard({ user, onLogout }) {
                       </Link>
                     </div>
                   ) : (
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead className="bg-gray-50 dark:bg-gray-900">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Job Title</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Skills</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                          {jobs.slice(0, 5).map(job => (
-                            <tr key={job._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900 dark:text-white">{job.title}</div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-500 dark:text-gray-400">{job.skills?.join(', ')}</div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <Link
-                                  to={'/jobs/' + job._id + '/resumes'}
-                                  className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                                >
-                                  View Resumes
-                                </Link>
-                                <Link
-                                  to={'/jobs/' + job._id + '/upload'}
-                                  className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
-                                >
-                                  Upload Resume
-                                </Link>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                    <div className="space-y-4 p-4">
+                      {jobs.slice(0, 5).map(job => (
+                        <div key={job._id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                          <div className="flex-1 min-w-0 mb-3 sm:mb-0">
+                            <h4 className="text-sm font-medium text-gray-900 dark:text-white truncate">{job.title}</h4>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              Skills: {job.skills?.slice(0, 3).join(', ')}{job.skills?.length > 3 ? '...' : ''}
+                            </p>
+                          </div>
+                          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                            <Link
+                              to={'/jobs/' + job._id + '/resumes'}
+                              className="inline-flex items-center justify-center px-3 py-2 text-xs font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 dark:text-indigo-300 dark:bg-indigo-900/50 dark:hover:bg-indigo-900 transition-colors"
+                            >
+                              View Resumes
+                            </Link>
+                            <Link
+                              to={'/jobs/' + job._id + '/upload'}
+                              className="inline-flex items-center justify-center px-3 py-2 text-xs font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all"
+                            >
+                              Upload Resume
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                      {jobs.length > 5 && (
+                        <div className="text-center pt-2">
+                          <Link
+                            to="/"
+                            className="text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+                          >
+                            View all {jobs.length} jobs →
+                          </Link>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
