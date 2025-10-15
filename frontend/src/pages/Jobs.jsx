@@ -76,6 +76,17 @@ export default function Jobs() {
 
   return (
     <div className="space-y-8">
+      {/* Breadcrumb Navigation */}
+      <nav className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+        <Link to="/login" className="hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1">
+          <span>🏠</span> Dashboard
+        </Link>
+        <span>›</span>
+        <span className="text-gray-900 dark:text-white font-medium flex items-center gap-1">
+          <span>💼</span> Jobs
+        </span>
+      </nav>
+
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Jobs</h2>

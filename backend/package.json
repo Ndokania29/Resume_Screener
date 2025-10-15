@@ -1,16 +1,18 @@
 {
-  "name": "backend",
+  "name": "smart-resume-screener-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "AI-powered resume screening backend API",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "build": "echo 'No build step needed for Node.js'",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["resume", "ats", "ai", "screening", "recruitment"],
+  "author": "Smart Resume Screener Team",
+  "license": "MIT",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^3.0.2",
@@ -21,11 +23,12 @@
     "mongodb": "^6.20.0",
     "mongoose": "^8.19.1",
     "multer": "^2.0.2",
-    "openai": "^6.3.0",
     "pdf-parse": "^1.1.1"
   },
-  "description": "",
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

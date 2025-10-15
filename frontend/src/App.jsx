@@ -1,5 +1,6 @@
 import { Outlet, Link, useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { useAuth } from './state/AuthContext.jsx'
+import FloatingNav from './components/FloatingNav.jsx'
 
 function App() {
   const navigate = useNavigate()
@@ -95,6 +96,9 @@ function App() {
           </p>
         </div>
       </footer>
+
+      {/* Floating Navigation */}
+      <FloatingNav />
     </div>
   )
 }
